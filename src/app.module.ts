@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { EvalModule } from './eval/eval.module';
 import { ApiModule } from './api/api.module';
@@ -20,15 +18,13 @@ import { ExampleModule } from './example/example.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [__dirname + '**/*.entity.{js,ts}'],
-      synchronize: true,
-    }),
+      entities: [__dirname + '/**/*.entity.{js,ts}'],
+      synchronize: true
+     }),
     AuthModule,
     EvalModule,
     ApiModule,
     ExampleModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

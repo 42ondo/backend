@@ -6,27 +6,27 @@ export class EvalEntity extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column()
-	evaluator: string;
+	//@Column()
+	//evaluator: string;
 
-	@Column()
-	appraisee: string; // 피평가자
+	//@Column()
+	//appraisee: string; // 피평가자
 
-	@Column()
-	comment: string;
+	//@Column()
+	//comment: string;
+	
+	//@Column()
+	//score: number;
 
-	@Column()
-	score: number;
+	//@Column()
+	//tag: string;
 
-	@Column()
-	tag: string;
+	//@Column()
+	//start_eval_time: number;
 
-	@Column()
-	start_eval_time: number;
+	//@Column()
+	//end_eval_time: number;
 
-	@Column()
-	end_eval_time: number;
-
-	@Column()
-	subject: string;
+	//@Column()
+	//subject: string;
 }
