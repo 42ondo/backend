@@ -6,11 +6,11 @@ export class EvalEntity extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	//@Column()
-	//evaluator: string;
+	@Column()
+	comment: string;
 
-	//@Column()
-	//appraisee: string; // 피평가자
+	@Column()
+	feedback: string; // 피평가자
 
 	//@Column()
 	//comment: string;

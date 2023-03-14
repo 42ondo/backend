@@ -35,8 +35,8 @@ export class ApiService {
     onSuccess: (response: any) => void,
   ) {
     const request = this.http
-      .get(url, this.axiosConfig())
-      .pipe(map(onSuccess))
+    .get(url, { params: data, ...this.axiosConfig() })
+    .pipe(map(onSuccess))
       .pipe(
         catchError((error) => {
           throw new ForbiddenException(error.message);
@@ -47,7 +47,18 @@ export class ApiService {
     return response;
   }
 
-  public async getFeedbacks() {
-    return this.getApi('/feedbacks', undefined, (response) => response.data);
+  public async getFeedbacks() :Promise<any> {
+    return this.getApi('/scale_teams', { 
+			'range[created_at]': "2023-03-014T00:00:00.000Z,2023-03-14T00:00:00.000Z",
+			'filter[campus_id]' :29,
+			'filter[user_id]':86834,
+		}
+    , (response) => {
+      const scaleTeamsList = response.data;
+      return scaleTeamsList.map(item=> {
+        const {id, comment, feedback} = item;
+        return {id, comment, feedback}
+      })
+    });
   }
 }
