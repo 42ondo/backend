@@ -14,12 +14,8 @@ export class EvalService {
 		private apiService:ApiService,
 	) {}
 
-	//create_data(evaluator: string): Promise <EvalEntity> {
-	//	return (this.evalRepository.create_data(evaluator));
-	//}
 	async create_data(): Promise <any> {
 		const data : EvalDtoType[] = await this.apiService.getFeedbacks();
 		return await this.evalRepository.create_data(data);
-		
 	}
 }
