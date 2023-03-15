@@ -19,9 +19,9 @@ import { ExampleModule } from './example/example.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true
-     }),
-    AuthModule,
+      synchronize: true,
+    }),
+    AuthModule.forRoot(),
     EvalModule,
     ApiModule,
     ExampleModule,
