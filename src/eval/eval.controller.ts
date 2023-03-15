@@ -11,8 +11,8 @@ export class EvalController {
 	//	return (this.evalservice.create_data(evaluator));
 	//}
 
-	@Post()
-	create_data(): Promise<EvalEntity> {
+	@Post('/')
+	create_data(): Promise<any> {
 		return (this.evalservice.create_data());
 	}
 }
