@@ -7,11 +7,9 @@ import { EvalDtoType } from "./eval.dto";
 export class EvalRepository extends Repository<EvalEntity> {
 
 	async create_data(evalData: EvalDtoType[]): Promise<EvalEntity[]> {
-
 		const data = this.create(evalData);
 
 		await this.save(data);
 		return (data);
 	}
-
 }
