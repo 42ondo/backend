@@ -10,7 +10,7 @@ import { ApiModule } from 'src/api/api.module';
 @Module({
   imports: [
 		TypeOrmExModule.forCustomRepository([EvalRepository]),
-    ApiModule,		
+		ApiModule,
 	],
   controllers: [EvalController],
   providers: [EvalService]
