@@ -5,6 +5,7 @@ import { EvalRepository } from './eval.repository';
 import { EvalEntity } from './eval.entity';
 import { ApiService } from 'src/api/api.service';
 import { EvalDtoType } from './eval.dto';
+
 @Injectable()
 export class EvalService {
 
@@ -14,8 +15,7 @@ export class EvalService {
 		private apiService:ApiService,
 	) {}
 
-	async create_data(): Promise <any> {
-		const data : EvalDtoType[] = await this.apiService.getFeedbacks();
+	async create_data(data: EvalDtoType[]): Promise <any> {
 		return await this.evalRepository.create_data(data);
 	}
 }

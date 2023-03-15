@@ -39,6 +39,7 @@ export class ApiService {
     .pipe(map(onSuccess))
       .pipe(
         catchError((error) => {
+          console.log(error);
           throw new ForbiddenException(error.message);
         }),
       );
@@ -48,17 +49,17 @@ export class ApiService {
   }
 
   public async getFeedbacks() :Promise<any> {
-    return this.getApi('/scale_teams', { 
-			'range[created_at]': "2023-03-014T00:00:00.000Z,2023-03-14T00:00:00.000Z",
+    return await this.getApi('/scale_teams', { 
+			//'range[created_at]': "2023-02-01T00:00:00.000Z,2023-03-14T00:00:00.000Z",
 			'filter[campus_id]' :29,
 			'filter[user_id]':86834,
 		}
     , (response) => {
       const scaleTeamsList = response.data;
-      return scaleTeamsList.map(item=> {
-        const {id, comment, feedback} = item;
-        return {id, comment, feedback}
-      })
+      return scaleTeamsList.map(item => {
+        const {id, begin_at, filled_at, team:{project_id}, comment, feedback} = item;
+        return {id, begin_at, filled_at, project_id, comment, feedback};
+      });
     });
   }
 }
