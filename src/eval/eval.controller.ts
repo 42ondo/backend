@@ -10,22 +10,14 @@ export class EvalController {
     private evalService: EvalService,
   ) {}
 
-  dataList = [];
   @Get()
-  //   @UseGuards(JwtAuthGuard)
   async handleCron() {
     // 자정마다 실행, 1. scaleTeam 정보 받아서 가공하기 2. eval DB에 넣기 3. user DB에 넣고 4. 기타등등
     const data = await this.get42EvalData();
-    console.log('after', data);
-    // console.log(
-    //   data.map((i, index) => {
-    //     return { index, flag: i.flag };
-    //   }),
-    // );
-    // this.evalService.createEvalData(data);
+
+    this.evalService.createEvalData(data);
     //this.userService.createUserData(data);
   }
-
   private async get42EvalData(): Promise<any> {
     return await this.apiService.getApi(
       '/scale_teams',
@@ -35,11 +27,8 @@ export class EvalController {
         'filter[campus_id]': 29,
       },
       (response) => {
-        const scaleTeamsList = response.data;
-        // return scaleTeamsList;
-        console.log('origin', scaleTeamsList.length);
-        return scaleTeamsList
-          .filter((i) => i.flag.positive === true)
+        return response.data
+          .filter((item) => item.flag.positive === true)
           .map((item) => {
             const {
               id,
@@ -59,6 +48,7 @@ export class EvalController {
               projectId: project_id,
               comment,
               corrector,
+              from: corrector.id,
               duration,
               isOutStanding: flag.id === 9,
             };
