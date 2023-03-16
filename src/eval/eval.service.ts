@@ -15,22 +15,25 @@ export class EvalService {
 		private apiService:ApiService,
 	) {}
 
-	async createEvalData(evalDataDtos: EvalDtoType[]): Promise <any> {
-		const evalDataList = [];
+	async createEvalData(evalDataDtos: EvalDtoType[]): Promise <void> {
+		console.log(evalDataDtos.flag)
+		// const evalEntitys = evalDataDtos.map(({id, comment, begin_at, filled_at,project_id, corrector, duration,flags }) => {
 
-		for (const evalDatadDto of evalDataDtos) {
-			const { id, comment, feedback, begin_at, filled_at, project_id } = evalDatadDto;
+			// const isOut = flags.filter(x=>x.id===9)[0].positive === true ? true: false || false
+			// return {id, comment, beginAt:begin_at, filledAt:filled_at, projectId:project_id,from:corrector.id, duration, isOutStanding:isOut};
+		// })
+		// console.log(evalEntitys);
+		// console.dir(evalDataDtos.map(i => i.flags.filter(i => i.id === 9)));
 
-			const evalData = new EvalEntity();
-			evalData.id = id;
-			evalData.comment = comment;
-			evalData.feedback = feedback;
-			evalData.begin_at = begin_at;
-			evalData.filled_at = filled_at;
-			evalData.project_id = project_id;
-
-			await this.evalRepository.createEvalData(evalData);
-		}
-		return evalDataDtos;
+			// await this.evalRepository.createEvalData(evalData);
 	}
 }
+
+
+/*
+
+return {id, comment, beginAt:begin_at, filledAt:filled_at, projectId:project_id,from:corrector.id, duration, 
+	isOutStanding:flags.filter(i => i.id === 9)[0].positive === falle ? false : true
+
+
+*/

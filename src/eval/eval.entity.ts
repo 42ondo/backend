@@ -8,11 +8,15 @@ export class EvalEntity extends BaseEntity {
 	@Column()
 	comment: string;
 	@Column()
-	feedback: string;
+	from:number;
 	@Column()
-	begin_at: string;
+	beginAt: string;
 	@Column()
-	filled_at: string;
+	filledAt: string;
 	@Column()
-	project_id: number;
+	duration: number;
+	@Column()
+	isOutStanding: boolean;
+	@Column()
+	projectId: number;
 }

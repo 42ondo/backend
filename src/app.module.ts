@@ -6,6 +6,7 @@ import { EvalModule } from './eval/eval.module';
 import { ApiModule } from './api/api.module';
 import { Cron, ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CronModule } from './cron/cron.module';
 	EvalModule,
 	ApiModule,
 	CronModule,
+	UserModule,
   ],
 })
 export class AppModule {}

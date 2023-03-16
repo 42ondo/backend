@@ -29,7 +29,7 @@ export class ApiService {
     };
   }
 
-  private async getApi(
+  async getApi(
     url: string,
     data: any,
     onSuccess: (response: any) => void,
@@ -47,37 +47,4 @@ export class ApiService {
     const response = await lastValueFrom(request);
     return response;
   }
-
-
-  public async getFeedbacks() :Promise<any> {
-    return await this.getApi('/scale_teams', { 
-		//'range[created_at]': "2023-02-01T00:00:00.000Z,2023-03-14T00:00:00.000Z",
-		'filter[campus_id]' :29,
-		'filter[user_id]':86834,
-		}
-		, (response) => {
-				const scaleTeamsList = response.data;
-				return scaleTeamsList.map(item => {
-					const {id, begin_at, filled_at, team:{project_id}, comment, feedback} = item;
-					return {id, begin_at, filled_at, project_id, comment, feedback};
-					}
-				);
-			}
-		);
-	}
-
-
-  public async getUsersData() :Promise<any> {
-	return await this.getApi('/campus/29/users'
-		, null
-		, (response) => {
-				const usersList = response.data;
-				return usersList.map(item => {
-					const {id, login, image:{link}} = item;
-					return {id, login, link};
-					}
-				);
-			}
-		);
-	}
 }
