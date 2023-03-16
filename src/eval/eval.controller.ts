@@ -1,18 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { EvalEntity } from './eval.entity';
 import { EvalService } from './eval.service';
+import { EvalDtoType } from './eval.dto';
 
 @Controller('eval')
 export class EvalController {
-    constructor(private evalservice: EvalService) {}
+	constructor(private evalservice: EvalService) {}
 
-	//@Post()
-	//create_data( @Body('evaluator') evaluator: string): Promise<EvalEntity> {
-	//	return (this.evalservice.create_data(evaluator));
-	//}
-
-	@Post()
-	create_data(): Promise<EvalEntity> {
-		return (this.evalservice.create_data());
+	@Get()
+	create_data(data: EvalDtoType[]): Promise<any> {
+		return (this.evalservice.create_data(data));
 	}
 }

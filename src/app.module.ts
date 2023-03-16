@@ -4,7 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { EvalModule } from './eval/eval.module';
 import { ApiModule } from './api/api.module';
-import { ExampleModule } from './example/example.module';
+import { Cron, ScheduleModule } from '@nestjs/schedule';
+import { CronModule } from './cron/cron.module';
 
 @Module({
   imports: [
@@ -21,10 +22,11 @@ import { ExampleModule } from './example/example.module';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
-    AuthModule.forRoot(),
-    EvalModule,
-    ApiModule,
-    ExampleModule,
+	ScheduleModule.forRoot(),
+	AuthModule.forRoot(),
+	EvalModule,
+	ApiModule,
+	CronModule,
   ],
 })
 export class AppModule {}
