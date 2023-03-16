@@ -2,6 +2,8 @@ import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { UserService } from 'src/user/user.service';
+import { WordEntity } from 'src/word/word.entity';
+import { WordService } from 'src/word/word.service';
 import { EvalService } from './eval.service';
 
 @Controller('eval')
@@ -10,6 +12,7 @@ export class EvalController {
     private apiService: ApiService,
     private userService: UserService,
     private evalService: EvalService,
+	private wordService: WordService,
   ) {}
 
   @Get()
