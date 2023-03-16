@@ -1,7 +1,6 @@
 import { Repository } from 'typeorm';
 import { EvalEntity } from './eval.entity';
 import { CustomRepository } from 'src/typeorm-ex/typeorm-ex.decorator';
-import { EvalDtoType } from './eval.dto';
 
 @CustomRepository(EvalEntity)
 export class EvalRepository extends Repository<EvalEntity> {
