@@ -15,7 +15,22 @@ export class EvalService {
 		private apiService:ApiService,
 	) {}
 
-	async create_data(data: EvalDtoType[]): Promise <any> {
-		return await this.evalRepository.create_data(data);
+	async createEvalData(evalDataDtos: EvalDtoType[]): Promise <any> {
+		const evalDataList = [];
+
+		for (const evalDatadDto of evalDataDtos) {
+			const { id, comment, feedback, begin_at, filled_at, project_id } = evalDatadDto;
+
+			const evalData = new EvalEntity();
+			evalData.id = id;
+			evalData.comment = comment;
+			evalData.feedback = feedback;
+			evalData.begin_at = begin_at;
+			evalData.filled_at = filled_at;
+			evalData.project_id = project_id;
+
+			await this.evalRepository.createEvalData(evalData);
+		}
+		return evalDataDtos;
 	}
 }
