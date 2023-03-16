@@ -16,7 +16,7 @@ export class EvalService {
     try {
       await this.evalRepository.createEvalDatas(evalData);
     } catch (e) {
-      console.log(e.message);
+      console.log('eval serivce', e.message);
     }
   }
 }

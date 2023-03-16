@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { UserService } from 'src/user/user.service';
@@ -13,24 +13,29 @@ export class EvalController {
   ) {}
 
   @Get()
-  async handleCron() {
-    // 자정마다 실행, 1. scaleTeam 정보 받아서 가공하기 2. eval DB에 넣기 3. user DB에 넣고 4. 기타등등
-    const data = await this.get42EvalData();
+  async initialize() {
+    let data: any[] = ['start'];
+    let i = 1;
 
-    this.evalService.createEvalData(data);
-    this.userService.createUserData(data.map((item) => item.corrector));
+    while (data.length > 0) {
+      data = await this.get42EvalData(i++);
+      await this.evalService.createEvalData(data);
+      await this.userService.createUserData(data.map((item) => item.corrector));
+    }
   }
-  private async get42EvalData(): Promise<any> {
+  private async get42EvalData(page: number): Promise<any> {
+    const today = new Date();
     return await this.apiService.getApi(
       '/scale_teams',
       {
-        'range[created_at]':
-          '2022-02-01T00:00:00.000Z,2023-03-14T00:00:00.000Z',
+        'range[created_at]': `2022-01-01T00:00:00.000Z,${today.toISOString()}`, // 2000개 넘음...ㅠ
+        // 'range[created_at]': `2022-03-02T00:00:00.000Z,2022-03-03T00:00:00.000Z`, // 평가가 별로 없었던 날짜 61개 data 받을 수 있음
         'filter[campus_id]': 29,
+        page: page,
       },
       (response) => {
         return response.data
-          .filter((item) => item.flag.positive === true)
+          .filter((item) => item.flag.positive === true && item.final_mark > 0)
           .map((item) => {
             const {
               id,
@@ -42,7 +47,6 @@ export class EvalController {
               corrector: { id: userId, login, url },
               scale: { duration },
             } = item;
-
             return {
               id,
               beginAt: begin_at,
