@@ -6,7 +6,7 @@ import { EvalDtoType } from "./eval.dto";
 @CustomRepository(EvalEntity)
 export class EvalRepository extends Repository<EvalEntity> {
 
-	async create_data(evalData: EvalDtoType[]): Promise<EvalEntity[]> {
+	async createEvalData(evalData: EvalEntity): Promise<EvalEntity> {
 		const data = this.create(evalData);
 
 		await this.save(data);
