@@ -1,12 +1,14 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { UserService } from 'src/user/user.service';
 import { EvalService } from './eval.service';
 
 @Controller('eval')
 export class EvalController {
   constructor(
     private apiService: ApiService,
+    private userService: UserService,
     private evalService: EvalService,
   ) {}
 
@@ -16,7 +18,7 @@ export class EvalController {
     const data = await this.get42EvalData();
 
     this.evalService.createEvalData(data);
-    //this.userService.createUserData(data);
+    this.userService.createUserData(data.map((item) => item.corrector));
   }
   private async get42EvalData(): Promise<any> {
     return await this.apiService.getApi(
@@ -37,7 +39,7 @@ export class EvalController {
               filled_at,
               team: { project_id },
               comment,
-              corrector,
+              corrector: { id: userId, login, url },
               scale: { duration },
             } = item;
 
@@ -47,8 +49,8 @@ export class EvalController {
               filledAt: filled_at,
               projectId: project_id,
               comment,
-              corrector,
-              from: corrector.id,
+              corrector: { id: userId, login, imgUrl: url },
+              from: userId,
               duration,
               isOutStanding: flag.id === 9,
             };
