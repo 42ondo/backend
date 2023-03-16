@@ -20,10 +20,10 @@ import { CronModule } from './cron/cron.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true
-     }),
+      synchronize: true,
+    }),
 	ScheduleModule.forRoot(),
-	AuthModule,
+	AuthModule.forRoot(),
 	EvalModule,
 	ApiModule,
 	CronModule,
