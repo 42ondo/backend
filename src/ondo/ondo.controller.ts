@@ -6,9 +6,9 @@ export class OndoController {
 
 	constructor (private ondoService: OndoService) {}
 
-	@Get('/rank')
+	@Get('/ondo/rank')
 	handler () { // renaming
-		//return this.ondoService.getOndoRank();
+		// return this.ondoService.getOndoRank();
 	}
 
 	@Get('/average')
