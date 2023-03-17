@@ -25,7 +25,8 @@ export class EvalController {
       data = await this.get42EvalData(1);
       await this.evalService.createEvalData(data);
       await this.userService.createUserData(data.map((item) => item.corrector));
-    // }
+	await this.wordService.createWordData(data);
+    }
   }
 
   private async get42EvalData(page: number): Promise<any> {
