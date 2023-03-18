@@ -9,11 +9,11 @@ import { WordService } from './word.service';
 
 @Module({
 	imports: [
-		TypeOrmExModule.forCustomRepository([WordRepository]),
-		// EvalService,
+		TypeOrmExModule.forCustomRepository([WordRepository, UserRepository, EvalRepository]),
+
 	],
   controllers: [WordController],
-  providers: [WordService, EvalRepository, UserRepository],
+  providers: [WordService],
   exports: [WordService]
 })
 export class WordModule {}

@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EvalRepository } from 'src/eval/eval.repository';
+import { UserRepository } from 'src/user/user.repository';
 import { WordRepository } from './word.repository';
 
 type DataType = {
@@ -16,7 +18,9 @@ type DataType = {
 
 type CommentData = {
 	comment: string
-	evalId: number;
+	eval_id: number;
+	user_id: number;
+	project_id: number;
 }
 
 let mecab = require('mecab-ya')
@@ -26,19 +30,30 @@ export class WordService {
 	constructor (
 		@InjectRepository(WordRepository)
 		private wordRepository: WordRepository,
+		@InjectRepository(UserRepository)
+		private userRepository: UserRepository,
+		@InjectRepository(EvalRepository)
+		private evalRepository: EvalRepository,
 	) {}
 
 	async createWordData(datas: DataType[]): Promise<void> {
 		const comments = await Promise.all(datas.map(async (item) => {
-			const { comment, id: evalId } = item;
-			return { comment, evalId };
+			return { 
+				comment:item.comment, 
+				eval_id: item.id, 
+				user_id: item.from, 
+				project_id: item.projectId };
 		}));
 		const words = await parseWord(comments)
 		this.wordRepository.createWordData(words)
 	}
 
-	async getWordRanking(rank: number): Promise<{ id: number; word: string; count: number }[]> {
+	async getWordRanking(rank: number) {
 		return await this.wordRepository.getWordRanking(rank);
+	}
+
+	async getUserWordRanking (userId: number) {
+		return this.wordRepository.getUserWordRanking(userId);
 	}
 }
 
@@ -54,7 +69,12 @@ async function parseWord(comments: CommentData[]): Promise<any> {
 				});
 				const firstFields = data.map((item2) => {
 					const { word, evalId } = item2;
-					return { word: item2[0], evalId: item.evalId };
+					return { 
+						word: item2[0], 
+						eval_id: item.eval_id, 
+						user_id: item.user_id, 
+						project_id: item.project_id
+					};
 				});
 				words.push(...firstFields); // push the resulting array into the `words` array
 				resolve();
