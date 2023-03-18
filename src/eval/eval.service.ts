@@ -9,6 +9,7 @@ import { time } from 'console';
 import { fileURLToPath } from 'url';
 import { Between } from 'typeorm';
 import { ApiService } from 'src/api/api.service';
+import { filter } from 'rxjs';
 
 class Result {
   evalCnt: number;
@@ -40,11 +41,17 @@ export class EvalService {
     const today = new Date();
     const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-    const data = await this.evalRepository.find({
-      where: { 
-        beginAt: Between(weekAgo.toISOString(), today.toISOString()),
-      },
-    });
+      const data = await this.evalRepository
+      .createQueryBuilder("eval_entity")
+      .select("eval_entity.from")
+      .addSelect("COUNT(eval_entity.from)", "count")
+      .where("eval_entity.beginAt >= :start AND eval_entity.beginAt <= :end", {
+          start: weekAgo,
+          end: today,
+      })
+      .groupBy("eval_entity.from")
+      .having("COUNT(eval_entity.from) > :count", { count: 0 })
+      .getRawMany();
 
 		let i = -1;
 		var timeSpent = 0;
@@ -67,7 +74,6 @@ export class EvalService {
 		  const mostFrequentElements = Object.keys(elementCount)
 		  .filter((key) => elementCount[key] === maxCount)
 		  .map((key) => Number(key));
-		
 
 		  const mostSubject = await this.evalRepository
 		  .createQueryBuilder("eval_entity")
@@ -79,8 +85,10 @@ export class EvalService {
 		  .orderBy("count", "DESC")
 		  .getOne();
       let statEntitiy = new StatEntity;
-      statEntitiy.evalCnt = data.length;
-      statEntitiy.timeSpentAll = timeSpent;
+      const countSum = data.reduce((acc, curr) => acc + curr.count, 0);
+      const countAvg = countSum / data.length;
+      statEntitiy.evalCnt = countAvg;
+      statEntitiy.timeSpentAll = timeSpent / data.length;
       statEntitiy.timeZoneLike = mostFrequentElements.pop();
       statEntitiy.mostSubject = mostSubject.projectId;
 
@@ -89,22 +97,29 @@ export class EvalService {
 
   async getEvalDetail(id: number): Promise<any> {
 
+    const today = new Date();
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
       const frequencyResult = await this.evalRepository
       .createQueryBuilder("eval_entity")
       .select("eval_entity.from")
       .addSelect("COUNT(eval_entity.from)", "count")
+      .where("eval_entity.beginAt >= :start AND eval_entity.beginAt <= :end", {
+          start: weekAgo,
+          end: today,
+      })
       .groupBy("eval_entity.from")
       .having("COUNT(eval_entity.from) > :count", { count: 0 })
       .getRawMany();
 
       const targetVal = id;
       const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
-      const sortedArrCount = sortedArr.find(obj => obj.eval_entity_from === targetVal)?.count;
-      const countEqualArr = sortedArr.filter(obj => obj.count === sortedArrCount);
-      const rank = sortedArr.length - countEqualArr.length + 1;
+      const targetObj = sortedArr.find(obj => obj.eval_entity_from === targetVal);
+      console.log(sortedArr);
+      const rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal);
       const percentile = (rank / frequencyResult.length) * 100;
-
       const mostSubject = await this.evalRepository
+
       .createQueryBuilder("eval_entity")
       .select("eval_entity.projectId")
       .addSelect("eval_entity.index")
@@ -187,6 +202,12 @@ export class EvalService {
           });
       },
     );
+  }
+
+  async setUsersOndo()
+  {
+    const data = await this.evalRepository.find();
+
   }
 }
 
