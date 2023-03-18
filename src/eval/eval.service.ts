@@ -11,7 +11,7 @@ class Result {
   evalRatio: number;
   timeSpentAll : number;
   timeZoneLike : number;
-  mostSubject : string;
+  mostSubject : number;
 }
 
 @Injectable()
@@ -39,15 +39,23 @@ export class EvalService {
       .getRawMany();
       console.log(frequencyResult);
 
+      const targetVal = id;
+      const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
+      const countEqualArr = sortedArr.filter(obj => obj.count === sortedArr.find(obj => obj.eval_entity_from === targetVal).count);
+      const rank = sortedArr.length - countEqualArr.length + 1;
+      const percentile = ((frequencyResult.length - rank) / frequencyResult.length) * 100;
 
-
-      frequencyResult.sort((a, b) => parseInt(a.count) - parseInt(b.count));
-
-      const countSum = frequencyResult.reduce((sum, item) => sum + parseInt(item.count), 0);
-      const countAverage = countSum / frequencyResult.length;
-      const average = countSum / frequencyResult.length;
       
-      console.log(average); // 2
+      const mostSubject = await this.evalRepository
+      .createQueryBuilder("eval_entity")
+      .select("eval_entity.projectId")
+      .addSelect("eval_entity.index")
+      .addSelect("COUNT(eval_entity.projectId)", "count")
+      .groupBy("eval_entity.projectId")
+      .addGroupBy("eval_entity.index")
+      .orderBy("count", "DESC")
+      .getOne();
+      console.log(mostSubject);
 
       const found = await this.evalRepository.find(
         { where: {
@@ -79,12 +87,12 @@ export class EvalService {
     // var result = timeSpent.toString();
     let result = new Result();
     result.evalCnt = found.length;
-    // result.evalRatio = frequencyResult.find(eval_entity_from: id));
-    result.evalRatio = average;
+    result.evalRatio = percentile;
     result.timeSpentAll = timeSpent;
     result.timeZoneLike = mostFrequentElements.pop();
+    result.mostSubject = mostSubject.projectId;
     return  result;
-  } 
+  }
 }
 
 /*

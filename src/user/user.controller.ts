@@ -4,6 +4,10 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { Query } from '@nestjs/common';
 
+class title {
+	title: string;
+}
+
 @Controller('user')
 export class UserController {
 
@@ -14,9 +18,11 @@ export class UserController {
 		return (this.userService.getUserByName(name))
 	}
 
-	// @Get('/user/title/:name')
-	// getTitle(@Param('name') name: string) :Promise<string> {
+	@Get('/title/:name')
+	getTitle(@Param('name') name: string):title {
 		// return (this.wordService.getTitle());
-	// }
-
+		let result = new title;
+		result.title = name;
+		return (result);
+	}
 }
