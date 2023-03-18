@@ -14,11 +14,7 @@ export class OndoService {
 	constructor(
 		@InjectRepository(UserRepository)
 		private userRepository: UserRepository,
-	  ) {}
-
-	//async getOndoRank (count: number): Promise<user[]> {
-	//	//return await this.evalRepository.getOndoRank();
-	//}
+	) {}
 
 	async getOndoAverage (): Promise<Ondo> {
 		const result = await this.userRepository
@@ -29,5 +25,9 @@ export class OndoService {
 		let ondo = new Ondo();
 		ondo.ondo = result.average;
 	  return ondo;
+	}
+
+	async getOndoRank(count: number) {
+		return await this.userRepository.getOndoRank(count)
 	}
 }
