@@ -10,7 +10,6 @@ import { WordService } from './word.service';
 @Module({
 	imports: [
 		TypeOrmExModule.forCustomRepository([WordRepository, UserRepository, EvalRepository]),
-
 	],
   controllers: [WordController],
   providers: [WordService],
