@@ -8,6 +8,7 @@ import { UserEntity } from 'src/user/user.entity';
 import { time } from 'console';
 import { fileURLToPath } from 'url';
 import { Between } from 'typeorm';
+import { ApiService } from 'src/api/api.service';
 
 class Result {
   evalCnt: number;
@@ -23,6 +24,7 @@ export class EvalService {
     @InjectRepository(EvalRepository)
     private evalRepository: EvalRepository,
     private statService: StatService,
+    private apiService: ApiService,
   ) {}
 
   async createEvalData(evalData: EvalEntity[]): Promise<void> {
@@ -129,7 +131,7 @@ export class EvalService {
         var elapsedMin = elapsedMSec / 1000 / 60; 
         timeSpent += elapsedMin;
       }
-    const elementCount = evalTimeCnt.reduce((count, num) => {
+      const elementCount = evalTimeCnt.reduce((count, num) => {
       count[num] = (count[num] || 0) + 1;
       return count;
     }, {});
@@ -146,6 +148,47 @@ export class EvalService {
     result.mostSubject = mostSubject.projectId;
     return  result;
   }
+
+  async get42EvalData(page: number): Promise<any> {
+    const today = new Date();
+    return await this.apiService.getApi(
+      '/scale_teams',
+      {
+        'range[created_at]': `2022-01-01T00:00:00.000Z,${today.toISOString()}`, // 2000개 넘음...ㅠ
+        // 'range[created_at]': `2022-03-02T00:00:00.000Z,2022-03-03T00:00:00.000Z`, // 평가가 별로 없었던 날짜 61개 data 받을 수 있음
+        'filter[campus_id]': 29,
+        page: page,
+      },
+      (response) => {
+        return response.data
+          .filter((item) => item.flag.positive === true && item.final_mark > 0)
+          .map((item) => {
+            const {
+              id,
+              flag,
+              begin_at,
+              filled_at,
+              team: { project_id },
+              comment,
+              corrector: { id: userId, login, url },
+              scale: { duration },
+            } = item;
+            return {
+              id,
+              beginAt: begin_at,
+              filledAt: filled_at,
+              projectId: project_id,
+              comment,
+              corrector: { id: userId, login, imgUrl: url },
+              from: userId,
+              duration,
+              isOutStanding: flag.id === 9,
+            };
+          });
+      },
+    );
+  }
 }
+
 
 
