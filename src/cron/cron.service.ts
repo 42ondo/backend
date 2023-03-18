@@ -29,10 +29,10 @@ export class CronService {
         new Date().getMinutes(),
         new Date().getSeconds(),
       ));
-      const yesterDay = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0));
-      const data = await this.evalService.get42EvalData(1, yesterDay);
-      await this.evalService.createEvalData(data);
-      await this.userService.createUserData(data.map((item) => item.corrector));
+    const yesterDay = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0));
+    const data = await this.evalService.get42EvalData(1, yesterDay);
+    await this.evalService.createEvalData(data);
+    await this.userService.createUserData(data.map((item) => item.corrector));
 	  await this.wordService.createWordData(data);
     await this.statService.createStatData(await this.evalService.createStatData());
     }

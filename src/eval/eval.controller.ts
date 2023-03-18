@@ -32,8 +32,10 @@ export class EvalController {
       await this.userService.createUserData(data.map((item) => item.corrector));
 	  await this.wordService.createWordData(data);
     await this.statService.createStatData(await this.evalService.createStatData());
+    await this.evalService.setUsersOndo();
     }
     //}
+    
 
   
   @Get('/average')
