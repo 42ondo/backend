@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EvalRepository } from './eval.repository';
 import { EvalEntity } from './eval.entity';
+import { StatEntity } from 'src/stat/stat.entity';
+import { StatService } from 'src/stat/stat.service';
 import { UserEntity } from 'src/user/user.entity';
 import { time } from 'console';
 import { fileURLToPath } from 'url';
@@ -19,6 +21,7 @@ export class EvalService {
   constructor(
     @InjectRepository(EvalRepository)
     private evalRepository: EvalRepository,
+    private statService: StatService,
   ) {}
 
   async createEvalData(evalData: EvalEntity[]): Promise<void> {
@@ -27,6 +30,51 @@ export class EvalService {
     } catch (e) {
       console.log('eval serivce', e.message);
     }
+  }
+
+  async createStatData(): Promise<StatEntity> {
+    const data = await this.evalRepository.find();
+
+		let i = -1;
+		var timeSpent = 0;
+		const evalTimeCnt = [];
+		while (data[++i])
+		{
+		  const beginAt = new Date(data[i].beginAt);
+		  const filledAt = new Date(data[i].filledAt);
+		  evalTimeCnt.push(filledAt.getHours());
+		  var elapsedMSec = filledAt.getTime() - beginAt.getTime(); 
+		  var elapsedMin = elapsedMSec / 1000 / 60; 
+		  timeSpent += elapsedMin;
+		}
+
+		const elementCount = evalTimeCnt.reduce((count, num) => {
+			count[num] = (count[num] || 0) + 1;
+			return count;
+		  }, {});
+	  
+		  const maxCount = Math.max.apply(null, Object.values(elementCount));
+		  const mostFrequentElements = Object.keys(elementCount)
+		  .filter((key) => elementCount[key] === maxCount)
+		  .map((key) => Number(key));
+		
+
+		  const mostSubject = await this.evalRepository
+		  .createQueryBuilder("eval_entity")
+		  .select("eval_entity.projectId")
+		  .addSelect("eval_entity.index")
+		  .addSelect("COUNT(eval_entity.projectId)", "count")
+		  .groupBy("eval_entity.projectId")
+		  .addGroupBy("eval_entity.index")
+		  .orderBy("count", "DESC")
+		  .getOne();
+      let statEntitiy = new StatEntity;
+      statEntitiy.evalCnt = data.length;
+      statEntitiy.timeSpentAll = timeSpent;
+      statEntitiy.timeZoneLike = mostFrequentElements.pop();
+      statEntitiy.mostSubject = mostSubject.projectId;
+
+      return (statEntitiy);
   }
 
   async getEvalDetail(id: number): Promise<any> {

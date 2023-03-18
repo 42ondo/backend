@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { StatEntity } from 'src/stat/stat.entity';
+import { StatService } from 'src/stat/stat.service';
 import { UserEntity } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { WordEntity } from 'src/word/word.entity';
@@ -14,6 +16,7 @@ export class EvalController {
     private apiService: ApiService,
     private userService: UserService,
     private evalService: EvalService,
+    private statService: StatService,
 	private wordService: WordService,
   ) {}
 
@@ -25,8 +28,16 @@ export class EvalController {
       data = await this.get42EvalData(1);
       await this.evalService.createEvalData(data);
       await this.userService.createUserData(data.map((item) => item.corrector));
-	await this.wordService.createWordData(data);
-    }
+    // }
+    await this.statService.createStatData(await this.evalService.createStatData());
+  }
+  
+  @Get('/average')
+  async getEvalStat() :Promise<StatEntity> {
+		console.log("test");
+    const statData = await this.statService.getStatData();
+		console.log(statData);
+    return (statData);
   }
 
   private async get42EvalData(page: number): Promise<any> {
@@ -74,4 +85,5 @@ export class EvalController {
     const idbyname = await this.userService.getIdByName(name);
     return (this.evalService.getEvalDetail(idbyname));
   }
+
 }
