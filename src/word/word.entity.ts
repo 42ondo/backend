@@ -11,5 +11,9 @@ export class WordEntity extends BaseEntity {
 	@Column()
 	word: string;
 	@Column()
-	evalId: number;
+	eval_id: number;
+	@Column()
+	user_id: number;
+	@Column()
+	project_id: number;
 }
