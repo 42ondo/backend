@@ -52,8 +52,13 @@ export class WordService {
 		return await this.wordRepository.getWordRanking(rank);
 	}
 
-	async getUserWordRanking (userId: number) {
-		return this.wordRepository.getUserWordRanking(userId);
+	async getUserWordRanking (userName: string) {
+		const userInf = await this.userRepository.findOne({
+			where: {
+				login: userName
+			}
+		})
+		return this.wordRepository.getUserWordRanking(userInf.id);
 	}
 }
 

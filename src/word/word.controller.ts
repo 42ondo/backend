@@ -11,7 +11,7 @@ export class WordController {
 	}
 
 	@Get('/rank/:id')
-	async getUserWordRanking (@Param('id') userId: number) {
-		return await this.wordService.getUserWordRanking(userId);
+	async getUserWordRanking (@Param('string') userName: string) {
+		return await this.wordService.getUserWordRanking(userName);
 	}
 }
