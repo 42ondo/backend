@@ -21,7 +21,7 @@ export class StatService {
 		console.log('stat serivce', e.message);
 	  }
 	}
-
+	
 	async getStatData() :Promise<StatEntity> {
 		const data = await this.statRepository.find();
 		return (data[0]);
