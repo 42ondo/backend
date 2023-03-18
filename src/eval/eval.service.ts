@@ -95,22 +95,11 @@ export class EvalService {
       .having("COUNT(eval_entity.from) > :count", { count: 0 })
       .getRawMany();
 
-      console.log((await this.evalRepository.find()).length);
-      console.log(await this.evalRepository.find({
-        where: {
-          from: id,
-        },
-      }));
       const targetVal = id;
       const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
-      console.log((await this.evalRepository.find()).length, sortedArr.length);
-      let sortedArrCount = sortedArr.find(obj => obj.eval_entity_from === targetVal)?.count;
-      console.log("sortedarrCount", sortedArrCount, frequencyResult.find(obj => obj.eval_entity_from === targetVal)?.count);
+      const sortedArrCount = sortedArr.find(obj => obj.eval_entity_from === targetVal)?.count;
       const countEqualArr = sortedArr.filter(obj => obj.count === sortedArrCount);
-      console.log(countEqualArr.length);
       const rank = sortedArr.length - countEqualArr.length + 1;
-      console.log(rank);
-      console.log(frequencyResult.length);
       const percentile = (rank / frequencyResult.length) * 100;
 
       const mostSubject = await this.evalRepository
@@ -122,7 +111,6 @@ export class EvalService {
       .addGroupBy("eval_entity.index")
       .orderBy("count", "DESC")
       .getOne();
-      console.log(mostSubject);
 
       const found = await this.evalRepository.find(
         { where: {
@@ -150,8 +138,6 @@ export class EvalService {
     const mostFrequentElements = Object.keys(elementCount)
     .filter((key) => elementCount[key] === maxCount)
     .map((key) => Number(key));
-    console.log(found.length);
-    // var result = timeSpent.toString();
     let result = new Result();
     result.evalCnt = found.length;
     result.evalRatio = percentile;
