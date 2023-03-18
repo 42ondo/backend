@@ -1,12 +1,15 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, } from 'typeorm';
+import {	BaseEntity, 
+			Column, 
+			Entity, 
+			PrimaryGeneratedColumn, 
+	} from 'typeorm';
 
-  @Entity()
-  export class WordEntity extends BaseEntity {
+@Entity()
+export class WordEntity extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	id: number; // 고유 번호 할당 x
+	id: number;
 	@Column()
-	word: string; // word에 대한 문자열
+	word: string;
 	@Column()
-	evalId: number; // evalEntity Id
-  }
-  
+	evalId: number;
+}
