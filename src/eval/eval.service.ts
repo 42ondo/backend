@@ -149,12 +149,12 @@ export class EvalService {
     return  result;
   }
 
-  async get42EvalData(page: number): Promise<any> {
+  async get42EvalData(page: number, date: Date): Promise<any> {
     const today = new Date();
     return await this.apiService.getApi(
       '/scale_teams',
       {
-        'range[created_at]': `2022-01-01T00:00:00.000Z,${today.toISOString()}`, // 2000개 넘음...ㅠ
+        'range[created_at]': `${date.toISOString()},${today.toISOString()}`, // 2000개 넘음...ㅠ
         // 'range[created_at]': `2022-03-02T00:00:00.000Z,2022-03-03T00:00:00.000Z`, // 평가가 별로 없었던 날짜 61개 data 받을 수 있음
         'filter[campus_id]': 29,
         page: page,
