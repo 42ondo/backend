@@ -143,10 +143,6 @@ export class EvalService {
   }
 }
 
-/*
 
-return {id, comment, beginAt:begin_at, filledAt:filled_at, projectId:project_id,from:corrector.id, duration, 
-	isOutStanding:flags.filter(i => i.id === 9)[0].positive === falle ? false : true
+}
 
-
-*/

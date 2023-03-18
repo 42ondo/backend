@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { WordEntity } from './word.entity';
 import { WordRepository } from './word.repository';
-import { MecabAsync } from 'mecab-async'
-import { Mecab }from 'mecab-ya'
-import { parse } from 'path';
-import { first } from 'rxjs';
 
 type DataType = {
 	index: number,
-	id: number
+	id: number,
 	comment: string,
 	from: number;
 	beginAt: string
@@ -30,7 +25,7 @@ export class WordService {
 
 	constructor (
 		@InjectRepository(WordRepository)
-		private wordRepository: WordRepository
+		private wordRepository: WordRepository,
 	) {}
 
 	async createWordData(datas: DataType[]): Promise<void> {
@@ -38,8 +33,12 @@ export class WordService {
 			const { comment, id: evalId } = item;
 			return { comment, evalId };
 		}));
-		const words = await parseWord(comments);
-		this.wordRepository.createWordData(words);
+		const words = await parseWord(comments)
+		this.wordRepository.createWordData(words)
+	}
+
+	async getWordRanking(rank: number): Promise<{ id: number; word: string; count: number }[]> {
+		return await this.wordRepository.getWordRanking(rank);
 	}
 }
 
