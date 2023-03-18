@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EvalEntity } from 'src/eval/eval.entity';
 import { UserEntity } from './user.entity';
@@ -28,6 +28,9 @@ export class UserService {
         },
         });
         ;
+        console.log(found);
+        if (found === null)
+          throw new HttpException('Invalid Id', 404);
         return(found.id);
     }
 
