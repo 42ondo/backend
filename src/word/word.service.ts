@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserRepository } from '../user/user.repository';
 import { WordRepository } from './word.repository';
 
 type DataType = {
@@ -26,7 +27,13 @@ export class WordService {
 	constructor (
 		@InjectRepository(WordRepository)
 		private wordRepository: WordRepository,
-	) {}
+		@InjectRepository(UserRepository)
+		private userRepository: UserRepository,
+	) {
+        const users = this.userRepository.find();
+        console.log('userRepository:', users);
+
+	}
 
 	async createWordData(datas: DataType[]): Promise<void> {
 		const comments = await Promise.all(datas.map(async (item) => {
@@ -40,7 +47,14 @@ export class WordService {
 	async getWordRanking(rank: number): Promise<{ id: number; word: string; count: number }[]> {
 		return await this.wordRepository.getWordRanking(rank);
 	}
+
+async print() {
+	const a = await this.userRepository.find();
+	console.log(a);
 }
+
+}
+
 
 async function parseWord(comments: CommentData[]): Promise<any> {
 	const words = [];

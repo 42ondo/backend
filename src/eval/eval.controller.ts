@@ -32,7 +32,6 @@ export class EvalController {
     await this.statService.createStatData(await this.evalService.createStatData());
     }
     //}
-  }
   
   @Get('/average')
   async getEvalStat() :Promise<StatEntity> {

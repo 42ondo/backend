@@ -142,7 +142,3 @@ export class EvalService {
     return  result;
   }
 }
-
-
-}
-
