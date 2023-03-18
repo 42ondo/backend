@@ -32,7 +32,7 @@ export class EvalController {
     await this.statService.createStatData(await this.evalService.createStatData());
     }
     //}
-  }
+
   
   @Get('/average')
   async getEvalStat() :Promise<StatEntity> {
@@ -87,5 +87,4 @@ export class EvalController {
     const idbyname = await this.userService.getIdByName(name);
     return (this.evalService.getEvalDetail(idbyname));
   }
-
 }
