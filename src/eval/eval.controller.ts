@@ -25,7 +25,9 @@ export class EvalController {
     let data: any[] = ['start'];
     // let i = 1;
     // while (data.length > 0) {
-      data = await this.evalService.get42EvalData(1);
+      const date = new Date(2022, 1, 1, 0, 0);
+      console.log("test 1 : ",date);
+      data = await this.evalService.get42EvalData(1, date);
       await this.evalService.createEvalData(data);
       await this.userService.createUserData(data.map((item) => item.corrector));
 	  await this.wordService.createWordData(data);
