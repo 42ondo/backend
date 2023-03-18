@@ -26,8 +26,8 @@ export class OndoService {
 		.select('AVG(ondo)', 'average')
 		.getRawOne();
 		console.log(result);
-		let ondo = new Ondo;
-		ondo.ondo = result.ondo;
+		let ondo = new Ondo();
+		ondo.ondo = result.average;
 	  return ondo;
 	}
 }

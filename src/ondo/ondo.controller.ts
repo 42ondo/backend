@@ -1,10 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { OndoService } from './ondo.service';
 
-class Ondo {
-	ondo : number
-};
-
 @Controller('ondo')
 export class OndoController {
 
@@ -12,7 +8,7 @@ export class OndoController {
 
 
 	@Get('/average')
-	async handler2 ():Promise<Ondo> { // renaming
+	async handler2 ():Promise<any> { // renaming
 		console.log("test");
 		return (await this.ondoService.getOndoAverage());
 	}
