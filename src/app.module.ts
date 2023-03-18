@@ -7,7 +7,7 @@ import { ApiModule } from './api/api.module';
 import { Cron, ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { UserModule } from './user/user.module';
-//import { OndoModule } from './ondo/ondo.module';
+import { OndoModule } from './ondo/ondo.module';
 import { WordModule } from './word/word.module';
 import { StatModule } from './stat/stat.module';
 
@@ -32,7 +32,7 @@ import { StatModule } from './stat/stat.module';
 	ApiModule,
 	CronModule,
 	UserModule,
-	//OndoModule,
+	OndoModule,
 	WordModule,
 	StatModule,
   ],
