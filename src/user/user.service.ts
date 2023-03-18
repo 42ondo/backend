@@ -35,10 +35,13 @@ export class UserService {
     }
 
   async createUserData(userData: UserEntity[]): Promise<void> {
-    try {
-      await this.userRepository.createUserData(userData);
-    } catch (e) {
-      console.log('user Service', e.message);
+    for (const user of userData) {
+      try {
+        await this.userRepository.createUserData(user);
+        
+      } catch (e) {
+        console.log('user Service', e.message);
+      }
     }
   }
 }
