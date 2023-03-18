@@ -20,6 +20,7 @@ export class UserService {
       });
       return (found);
   }
+  
   async getIdByName(name: string): Promise<number> {
     const found = await this.userRepository.findOne(
       { where: {
