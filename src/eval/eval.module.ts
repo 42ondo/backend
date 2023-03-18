@@ -6,13 +6,15 @@ import { ApiModule } from 'src/api/api.module';
 import { EvalController } from './eval.controller';
 import { UserModule } from 'src/user/user.module';
 import { WordModule } from 'src/word/word.module';
+import { StatModule } from 'src/stat/stat.module';
 
 @Module({
   imports: [
     TypeOrmExModule.forCustomRepository([EvalRepository]),
     ApiModule,
     UserModule,
-	WordModule,
+	  WordModule,
+    StatModule,
   ],
   providers: [EvalService],
   exports: [EvalService],
