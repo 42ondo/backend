@@ -25,7 +25,7 @@ export class EvalController {
     let data: any[] = ['start'];
     // let i = 1;
     // while (data.length > 0) {
-      const date = new Date(2022, 1, 1, 0, 0);
+      const date = new Date(Date.UTC(2022, 1, 1, 0, 0));
       console.log("test 1 : ",date);
       data = await this.evalService.get42EvalData(1, date);
       await this.evalService.createEvalData(data);

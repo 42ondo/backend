@@ -11,10 +11,10 @@ export class StatEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   index: number;
 
-  @Column()
+  @Column({type: 'float'})
   evalCnt: number;
 
-  @Column({type:'float'})
+  @Column({type: 'float'})
   timeSpentAll : number;
 
   @Column()

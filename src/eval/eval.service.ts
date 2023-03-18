@@ -53,13 +53,22 @@ export class EvalService {
       .having("COUNT(eval_entity.from) > :count", { count: 0 })
       .getRawMany();
 
+      const found = await this.evalRepository.find({
+        where: {
+          beginAt: Between(
+            weekAgo.toISOString(),
+            today.toISOString()
+            )
+        },
+      });
 		let i = -1;
 		var timeSpent = 0;
 		const evalTimeCnt = [];
-		while (data[++i])
+  
+		while (found[++i])
 		{
-		  const beginAt = new Date(data[i].beginAt);
-		  const filledAt = new Date(data[i].filledAt);
+		  const beginAt = new Date(found[i].beginAt);
+		  const filledAt = new Date(found[i].filledAt);
 		  evalTimeCnt.push(filledAt.getHours()); 
 		  var elapsedMSec = filledAt.getTime() - beginAt.getTime(); 
 		  var elapsedMin = elapsedMSec / 1000 / 60; 
@@ -69,7 +78,6 @@ export class EvalService {
 			count[num] = (count[num] || 0) + 1;
 			return count;
 		  }, {});
-	  
 		  const maxCount = Math.max.apply(null, Object.values(elementCount));
 		  const mostFrequentElements = Object.keys(elementCount)
 		  .filter((key) => elementCount[key] === maxCount)
@@ -85,9 +93,9 @@ export class EvalService {
 		  .orderBy("count", "DESC")
 		  .getOne();
       let statEntitiy = new StatEntity;
-      const countSum = data.reduce((acc, curr) => acc + curr.count, 0);
-      const countAvg = countSum / data.length;
-      statEntitiy.evalCnt = countAvg;
+      const sum = data.reduce((acc, cur) => acc + Number(cur.count), 0);
+      const avg = sum / data.length;
+      statEntitiy.evalCnt = avg;
       statEntitiy.timeSpentAll = timeSpent / data.length;
       statEntitiy.timeZoneLike = mostFrequentElements.pop();
       statEntitiy.mostSubject = mostSubject.projectId;
@@ -115,7 +123,6 @@ export class EvalService {
       const targetVal = id;
       const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
       const targetObj = sortedArr.find(obj => obj.eval_entity_from === targetVal);
-      console.log(sortedArr);
       const rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal);
       const percentile = (rank / frequencyResult.length) * 100;
       const mostSubject = await this.evalRepository
