@@ -63,9 +63,10 @@ export class EvalController {
     };
   }
 
-  @Get('/:rank')
-  async getEvalRank(@Param('rank') rank: number) :Promise<any>{
-    const evals : any[] = await this.evalService.getEvalRank(rank)
+  @Get('/rank')
+  async getEvalRank(@Query('count') count: number) :Promise<any>{
+    console.log(count);
+    const evals : any[] = await this.evalService.getEvalRank(count)
     return {evals: evals.map(item => {return  {userName: item.eval_entity_from, count: item.count}})};
   }
 
