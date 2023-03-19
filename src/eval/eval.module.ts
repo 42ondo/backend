@@ -9,10 +9,11 @@ import { WordModule } from 'src/word/word.module';
 import { StatModule } from 'src/stat/stat.module';
 import { AlgorithmService } from 'src/algorithm/algorithm.service';
 import { AlgorithmModule } from 'src/algorithm/algorithm.module';
+import { UserRepository } from 'src/user/user.repository';
 
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([EvalRepository]),
+    TypeOrmExModule.forCustomRepository([EvalRepository, UserRepository]),
     ApiModule,
     UserModule,
 	WordModule,

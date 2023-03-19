@@ -10,13 +10,15 @@ import { fileURLToPath } from 'url';
 import { Between } from 'typeorm';
 import { ApiService } from 'src/api/api.service';
 import { filter } from 'rxjs';
+import { WordList as wordList } from "src/algorithm/algorithm.wordlist"
+import { UserRepository } from 'src/user/user.repository';
 
 class Result {
   evalCnt: number;
   evalRatio: number;
   timeSpentAll : number;
   timeZoneLike : number;
-  mostSubject : number;
+  mostSubject : string;
 }
 
 @Injectable()
@@ -24,6 +26,8 @@ export class EvalService {
   constructor(
     @InjectRepository(EvalRepository)
     private evalRepository: EvalRepository,
+    @InjectRepository(UserRepository)
+    private userRepository: UserRepository,
     private statService: StatService,
     private apiService: ApiService,
   ) {}
@@ -122,11 +126,10 @@ export class EvalService {
 
       const targetVal = id;
       const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
-      const targetObj = sortedArr.find(obj => obj.eval_entity_from === targetVal);
       const rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal);
       const percentile = (rank / frequencyResult.length) * 100;
+      
       const mostSubject = await this.evalRepository
-
       .createQueryBuilder("eval_entity")
       .select("eval_entity.projectId")
       .addSelect("eval_entity.index")
@@ -162,12 +165,24 @@ export class EvalService {
     const mostFrequentElements = Object.keys(elementCount)
     .filter((key) => elementCount[key] === maxCount)
     .map((key) => Number(key));
+
+    ///subject_id를 subject name으로 바꿔주는 코드.
+    console.log(wordList);
+    let subjectName: string;
+    for (const [key, value] of Object.entries(wordList) ) {
+			if (value.project_id === mostSubject.projectId) {
+				subjectName = key;
+  		}
+    }
+    ///subject_id를 subject name으로 바꿔주는 코드.
+    
     let result = new Result();
     result.evalCnt = found.length;
     result.evalRatio = percentile;
     result.timeSpentAll = timeSpent;
     result.timeZoneLike = mostFrequentElements.pop();
-    result.mostSubject = mostSubject.projectId;
+    result.mostSubject = subjectName;
+    
     return  result;
   }
 
@@ -211,12 +226,31 @@ export class EvalService {
     );
   }
 
-  async setUsersOndo()
-  {
-    const data = await this.evalRepository.find();
+  async getEvalRank(cnt: number): Promise<any> {
+    const today = new Date();
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
+      const data = await this.evalRepository
+      .createQueryBuilder("eval_entity")
+      .select("eval_entity.from")
+      .addSelect("COUNT(eval_entity.from)", "count")
+      .where("eval_entity.beginAt >= :start AND eval_entity.beginAt <= :end", {
+          start: weekAgo,
+          end: today,
+      })
+      .groupBy("eval_entity.from")
+      .having("COUNT(eval_entity.from) > :count", { count: 0 })
+      .getRawMany();
+
+      const userRepo = await this.userRepository.find();
+      const sortedArr = data.slice().sort((a, b) => b.count - a.count);
+      const rank = sortedArr.slice(0, Math.min(cnt, sortedArr.length));
+      for (const item of rank) {
+        if (item.eval_entity_from === userRepo.filter(item2 => item2.id === item.eval_entity_from)[0].id) {
+          item.eval_entity_from = userRepo.filter(item2 => item2.id === item.eval_entity_from)[0].login;
+        }
+      }
+      console.log(rank);
+      return (rank);
   }
 }
-
-
-
