@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StatEntity } from './stat.entity';
 import { StatRepository } from './stat.repository';
-// class Result {
-// 	evalCnt: number;
-// 	timeSpentAll : number;
-// 	timeZoneLike : number;
-// 	mostSubject : number;
-//   }
+
 @Injectable()
 export class StatService {
 	constructor(
@@ -26,7 +21,12 @@ export class StatService {
 		const data = await this.statRepository.find();
 		return (data[0]);
 	}
-}
-
-
-
+	async updateStatData(statData: StatEntity) :Promise<void> {
+		await this.statRepository.update(
+		{ index: statData.index }, // 검색 조건
+		{ 
+		  timeSpentAll: statData.timeSpentAll, 
+		  timeZoneLike: statData.timeZoneLike, 
+		  mostSubject: statData.mostSubject 
+		})
+	}}

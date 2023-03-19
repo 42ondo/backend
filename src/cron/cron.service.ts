@@ -18,7 +18,6 @@ export class CronService {
   ) {}
 
     @Cron('0 0 * * * *')
-    // @Get()
     async handleCron() {
       // 자정마다 실행, 1. scaleTeam 정보 받아서 가공하기 2. eval DB에 넣기 3. user DB에 넣고 4. 기타등등
       const date = new Date(Date.UTC(
@@ -34,6 +33,6 @@ export class CronService {
     await this.evalService.createEvalData(data);
     await this.userService.createUserData(data.map((item) => item.corrector));
 	  await this.wordService.createWordData(data);
-    await this.statService.createStatData(await this.evalService.createStatData());
+    await this.statService.updateStatData(await this.evalService.createStatData());
     }
 }
