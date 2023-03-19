@@ -44,4 +44,11 @@ export class UserService {
       }
     }
   }
+  async resetUserOndo(): Promise<void> {
+    const datas = await this.userRepository.find();
+    for (const data of datas)
+    {
+        await this.userRepository.update({index: data.index}, {ondo: 42})
+    }
+  }
 }

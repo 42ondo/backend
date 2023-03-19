@@ -90,12 +90,11 @@ export class EvalService {
 		  const mostSubject = await this.evalRepository
 		  .createQueryBuilder("eval_entity")
 		  .select("eval_entity.projectId")
-		  .addSelect("eval_entity.index")
 		  .addSelect("COUNT(eval_entity.projectId)", "count")
 		  .groupBy("eval_entity.projectId")
-		  .addGroupBy("eval_entity.index")
 		  .orderBy("count", "DESC")
-		  .getOne();
+		  .getRawOne();
+
       let statEntitiy = new StatEntity;
       const sum = data.reduce((acc, cur) => acc + Number(cur.count), 0);
       const avg = sum / data.length;
@@ -125,24 +124,23 @@ export class EvalService {
       .getRawMany();
 
       const targetVal = id;
-      console.log(frequencyResult)
       const sortedArr = frequencyResult.sort((a, b) => b.count - a.count);
       let rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal) ;
       console.log(rank);
       if (rank < 0)
         return (undefined);
       const percentile = (rank / frequencyResult.length) * 100;
-      
+    
       const mostSubject = await this.evalRepository
       .createQueryBuilder("eval_entity")
       .select("eval_entity.projectId")
-      .addSelect("eval_entity.index")
+      .where("eval_entity.from = :id", { id })
       .addSelect("COUNT(eval_entity.projectId)", "count")
       .groupBy("eval_entity.projectId")
-      .addGroupBy("eval_entity.index")
       .orderBy("count", "DESC")
-      .getOne();
+      .getRawMany();
 
+      console.log(mostSubject);
       const found = await this.evalRepository.find(
         { where: {
           from: id,
@@ -173,10 +171,16 @@ export class EvalService {
 
     ///subject_id를 subject name으로 바꿔주는 코드.
     let subjectName: string;
+    let flag = 0;
     for (const [key, value] of Object.entries(wordList) ) {
-			if (value.project_id === mostSubject.projectId) {
+			if (value.project_id == mostSubject[0].eval_entity_projectId) {
+        flag = 1;
 				subjectName = key;
+        break ;
   		}
+    }
+    if (flag == 0) {
+      subjectName = "🏊"
     }
     ///subject_id를 subject name으로 바꿔주는 코드.
     
@@ -186,7 +190,6 @@ export class EvalService {
     result.timeSpentAll = timeSpent;
     result.timeZoneLike = mostFrequentElements.pop();
     result.mostSubject = subjectName;
-
     return  result;
   }
 

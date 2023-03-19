@@ -25,18 +25,18 @@ export class EvalController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async initialize() {
-    let data: any[] = ['start'];
-    let i = 1;
-    //while (i < 10) {
-      const date = new Date(Date.UTC(2022, 1, 1, 0, 0));
-      data = await this.evalService.get42EvalData(i, date);
-      await this.evalService.createEvalData(data);
-      await this.userService.createUserData(data.map((item) => item.corrector));
-      
-	    await this.wordService.createWordData(data);
-      await this.algoService.function(data);
-    //  i++;
-    //}
+    // let data: any[] = ['start'];
+    // let i = 1;
+    // while (i < 10) {
+    //   const date = new Date(Date.UTC(2022, 1, 1, 0, 0));
+    //   data = await this.evalService.get42EvalData(i, date);
+    //   await this.evalService.createEvalData(data);
+      // await this.userService.createUserData(data.map((item) => item.corrector));
+	    // await this.wordService.createWordFromDB();
+          // await this.userService.resetUserOndo();
+      await this.algoService.applyAlgoToUser();
+    //   i++;
+    // }
     await this.statService.createStatData(await this.evalService.createStatData());
   }
   
