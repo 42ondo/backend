@@ -93,15 +93,15 @@ export class EvalService {
 		  .addSelect("COUNT(eval_entity.projectId)", "count")
 		  .groupBy("eval_entity.projectId")
 		  .orderBy("count", "DESC")
-		  .getRawOne();
-
+		  .getRawOne()
+  
       let statEntitiy = new StatEntity;
       const sum = data.reduce((acc, cur) => acc + Number(cur.count), 0);
       const avg = sum / data.length;
       statEntitiy.evalCnt = avg;
       statEntitiy.timeSpentAll = timeSpent / data.length;
       statEntitiy.timeZoneLike = mostFrequentElements.pop();
-      statEntitiy.mostSubject = mostSubject.projectId;
+      statEntitiy.mostSubject = mostSubject.eval_entity_projectId;
 
       return (statEntitiy);
   }
@@ -140,7 +140,6 @@ export class EvalService {
       .orderBy("count", "DESC")
       .getRawMany();
 
-      console.log(mostSubject);
       const found = await this.evalRepository.find(
         { where: {
           from: id,
