@@ -7,7 +7,7 @@ import { UserRepository } from "src/user/user.repository";
 import { WordRepository } from "src/word/word.repository";
 import { WordList as wordList } from "src/algorithm/algorithm.wordlist"
 
-const Ratio = 0.4;
+const Ratio = 0.2;
 
 type EvalList = {
     commentLength: number,
@@ -88,7 +88,7 @@ export class AlgorithmService {
 		} else if (newOndo <= 0) {
 			newOndo = 0;
 		}
-		console.log(userInf.ondo, weightToOndo,newOndo);
+		// console.log(userInf.ondo, weightToOndo,newOndo);
 		this.userRepository.update({id: data.from}, {ondo: newOndo})
 	}
 }

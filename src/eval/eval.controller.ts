@@ -26,12 +26,13 @@ export class EvalController {
   async initialize() {
     let data: any[] = ['start'];
     let i = 1;
-    while (i < 100) {
+    while (i < 10) {
       const date = new Date(Date.UTC(2022, 1, 1, 0, 0));
       data = await this.evalService.get42EvalData(i, date);
       await this.evalService.createEvalData(data);
       await this.userService.createUserData(data.map((item) => item.corrector));
-	  await this.wordService.createWordData(data);
+      
+	    await this.wordService.createWordData(data);
       await this.algoService.function(data);
       i++;
     }
@@ -44,14 +45,11 @@ export class EvalController {
     const statData = await this.statService.getStatData();
 
     ///subject_id를 subject name으로 바꿔주는 코드.
-    console.log("called")
 
     let subjectName: string;
     for (const [key, value] of Object.entries(wordList) ) {
-      console.log("비교중", key,value,  value.project_id, statData.mostSubject)
 			if (value.project_id === statData.mostSubject) {
 				subjectName = key
-        console.log("찾음", key, subjectName, value.project_id)
   	  }
     ///subject_id를 subject name으로 바꿔주는 코드.
   }
@@ -76,6 +74,4 @@ export class EvalController {
     const idbyname = await this.userService.getIdByName(name);
     return (this.evalService.getEvalDetail(idbyname));
   }
-
-
 }

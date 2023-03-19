@@ -167,7 +167,6 @@ export class EvalService {
     .map((key) => Number(key));
 
     ///subject_id를 subject name으로 바꿔주는 코드.
-    console.log(wordList);
     let subjectName: string;
     for (const [key, value] of Object.entries(wordList) ) {
 			if (value.project_id === mostSubject.projectId) {
@@ -246,11 +245,14 @@ export class EvalService {
       const sortedArr = data.slice().sort((a, b) => b.count - a.count);
       const rank = sortedArr.slice(0, Math.min(cnt, sortedArr.length));
       for (const item of rank) {
-        if (item.eval_entity_from === userRepo.filter(item2 => item2.id === item.eval_entity_from)[0].id) {
-          item.eval_entity_from = userRepo.filter(item2 => item2.id === item.eval_entity_from)[0].login;
+        const filteredUser = userRepo.filter(item2 => item2.id === item.eval_entity_from);
+        if (filteredUser.length == 0) {
+          throw new Error(`rank not found`);
+        }
+        if (item.eval_entity_from === filteredUser[0].id) {
+          item.eval_entity_from = filteredUser[0].login;
         }
       }
-      console.log(rank);
       return (rank);
   }
 }
