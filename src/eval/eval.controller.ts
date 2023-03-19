@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { StatEntity } from 'src/stat/stat.entity';
@@ -23,6 +23,7 @@ export class EvalController {
   ) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async initialize() {
     // let data: any[] = ['start'];
     // let i = 1;
@@ -40,6 +41,7 @@ export class EvalController {
   }
   
   @Get('/average')
+  @UseGuards(JwtAuthGuard)
   async getEvalStat() :Promise<any> {
 
     const statData = await this.statService.getStatData();
@@ -64,12 +66,14 @@ export class EvalController {
   }
 
   @Get('/rank')
+  @UseGuards(JwtAuthGuard)
   async getEvalRank(@Query('count') count: number) :Promise<any>{
     const evals : any[] = await this.evalService.getEvalRank(count)
     return {evals: evals.map(item => {return  {userName: item.eval_entity_from, count: item.count}})};
   }
 
   @Get('/:name')
+  @UseGuards(JwtAuthGuard)
   async getEvalDetail(@Param('name') name: string ) :Promise<string> {
     const idbyname = await this.userService.getIdByName(name);
     const ret = await this.evalService.getEvalDetail(idbyname);
