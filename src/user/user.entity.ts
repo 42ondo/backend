@@ -10,6 +10,6 @@ export class UserEntity extends BaseEntity {
 	login: string;
 	@Column()
 	imgUrl: string;
-	@Column({default: 42})
+	@Column({default: 42, type: 'float'})
 	ondo: number;
 }
