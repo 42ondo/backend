@@ -102,7 +102,7 @@ export class EvalService {
       statEntitiy.evalCnt = avg;
       statEntitiy.timeSpentAll = timeSpent / data.length;
       statEntitiy.timeZoneLike = mostFrequentElements.pop();
-      statEntitiy.mostSubject = mostSubject.projectId;
+      statEntitiy.mostSubject = mostSubject[0].projectId;
 
       return (statEntitiy);
   }

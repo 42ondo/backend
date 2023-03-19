@@ -40,7 +40,7 @@ export class WordService {
 		console.log("datas.length : ", datas.length);
 		const comments = await Promise.all(datas.map(async (item) => {
 			return { 
-				comment:item.comment, 
+				comment:item.comment,
 				eval_id: item.id, 
 				user_id: item.from, 
 				project_id: item.projectId };
@@ -50,6 +50,31 @@ export class WordService {
 		console.log("words", words.length);
 
 		this.wordRepository.createWordData(words)
+	}
+
+	async createWordFromDB(): Promise<void> {
+		let datas = await this.evalRepository.find();
+		const comments = await Promise.all(datas.map(async (item) => {
+			return { 
+				comment:item.comment,
+				eval_id: item.id, 
+				user_id: item.from, 
+				project_id: item.projectId };
+		}));
+		console.log("comments", comments.length);
+
+		const groups = [];
+		for (let i = 0; i < comments.length; i += 30) {
+		  groups.push(comments.slice(i, i + 30));
+		}
+		let result: any[];
+		for (const group of groups) {
+		  // Do some processing with the current group
+		  const words = await parseWord(group)
+		  this.wordRepository.createWordData(words);
+		}
+		// console.log("words", words.length);
+
 	}
 
 	async getWordRanking(rank: number) {
@@ -69,9 +94,12 @@ export class WordService {
 
 async function parseWord(comments: CommentData[]): Promise<any> {
 	const words = [];
+	// console.log(comments.length)
 	await Promise.all(comments.map((item) => {
+		try{
 		return new Promise<void>((resolve) => {
-			mecab.pos(item.comment, (error, word) => {
+			 mecab.pos(item.comment, (error, word) => {
+				
 				const data = word.filter((x) => {
 					const head = x[1].substr(0, 2);
 					if (head == "NN" || head == "SL") return true;
@@ -88,7 +116,12 @@ async function parseWord(comments: CommentData[]): Promise<any> {
 				words.push(...firstFields); // push the resulting array into the `words` array
 				resolve();
 			});
+	
 		});
+		}
+		catch (err) {
+			return { error: 'Data not found' };
+		}
 	}));
 	return words;
 }

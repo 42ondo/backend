@@ -32,6 +32,12 @@ export class AlgorithmService {
 		}
 	}
 
+	async appyAlgoToUser(): Promise<void> {
+		const datas = await this.evalRepository.find();
+		for (const data of datas ){
+			this.function2(data);
+		}
+	}
 	async function2 (data: EvalEntity): Promise<void> {
 		let weightToOndo: number = 0;
 		let begin = new Date(data.beginAt);
@@ -88,7 +94,7 @@ export class AlgorithmService {
 		} else if (newOndo <= 0) {
 			newOndo = 0;
 		}
-		// console.log(userInf.ondo, weightToOndo,newOndo);
+		console.log(userInf.ondo);
 		this.userRepository.update({id: data.from}, {ondo: newOndo})
 	}
 }
