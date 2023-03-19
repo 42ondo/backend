@@ -31,11 +31,11 @@ export class WordRepository extends Repository<WordEntity> {
   }
 
   async getUserWordRanking(
-    userId: number,
+    user_id: number,
   ): Promise<{ word: string; count: number }[]> {
     const topWords = await this.createQueryBuilder('word_entity')
       .select('word_entity.word, COUNT(*) as count')
-      .where('word_entity.user_id = user_id', { userId })
+      .where('word_entity.user_id = :user_id', { user_id })
       .groupBy('word_entity.word')
       .orderBy('count', 'DESC')
       .limit(10)

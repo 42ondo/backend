@@ -58,7 +58,8 @@ export class WordService {
 				login: userName
 			}
 		})
-		return this.wordRepository.getUserWordRanking(userInf.id);
+		console.log(userInf);
+		return await this.wordRepository.getUserWordRanking(userInf.id);
 	}
 }
 
