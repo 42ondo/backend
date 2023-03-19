@@ -7,8 +7,8 @@ import { UserEntity } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { WordEntity } from 'src/word/word.entity';
 import { WordService } from 'src/word/word.service';
-import { EvalEntity } from './eval.entity';
 import { EvalService } from './eval.service';
+import { AlgorithmService } from 'src/algorithm/algorithm.service';
 
 @Controller('eval')
 export class EvalController {
@@ -18,6 +18,7 @@ export class EvalController {
     private evalService: EvalService,
     private statService: StatService,
 	private wordService: WordService,
+  	private algoService: AlgorithmService,
   ) {}
 
   @Get()
@@ -31,11 +32,10 @@ export class EvalController {
       await this.evalService.createEvalData(data);
       await this.userService.createUserData(data.map((item) => item.corrector));
 	  await this.wordService.createWordData(data);
-    await this.statService.createStatData(await this.evalService.createStatData());
-    await this.evalService.setUsersOndo();
+    	await this.statService.createStatData(await this.evalService.createStatData());
+    	await this.evalService.setUsersOndo();
+      this.algoService.function(data);
     }
-    //}
-    
 
   
   @Get('/average')
