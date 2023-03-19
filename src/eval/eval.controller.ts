@@ -31,8 +31,9 @@ export class EvalController {
     //   data = await this.evalService.get42EvalData(i, date);
     //   await this.evalService.createEvalData(data);
       // await this.userService.createUserData(data.map((item) => item.corrector));
-	    await this.wordService.createWordFromDB();
-      await this.algoService.appyAlgoToUser();
+	    // await this.wordService.createWordFromDB();
+          // await this.userService.resetUserOndo();
+      await this.algoService.applyAlgoToUser();
     //   i++;
     // }
     await this.statService.createStatData(await this.evalService.createStatData());

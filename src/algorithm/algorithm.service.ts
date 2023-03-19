@@ -32,12 +32,24 @@ export class AlgorithmService {
 		}
 	}
 
-	async appyAlgoToUser(): Promise<void> {
+	async applyAlgoToUser(): Promise<void> {
 		const datas = await this.evalRepository.find();
-		for (const data of datas ){
-			this.function2(data);
+		let   i = 0;
+		let   now;
+		let   end;
+		for (const data of datas) {
+			if (i == 0)
+				now = Date.now();
+			i++;
+			console.log(i)
+			await this.function2(data);
+			if (i % 50 == 0) {
+				end = Date.now();
+				console.log("time: ", (end - now) / 1000);
+			}
 		}
 	}
+
 	async function2 (data: EvalEntity): Promise<void> {
 		let weightToOndo: number = 0;
 		let begin = new Date(data.beginAt);
@@ -61,22 +73,22 @@ export class AlgorithmService {
 			}
 		})
 		
-		const globalW = wordList.globalWhite.element;
-		const globalB = wordList.globalBlack.element;
+		 const globalW = wordList.globalWhite.element;
+		 const globalB = wordList.globalBlack.element;
 		let cnt = 0;
-		for (const [key, value] of Object.entries(wordList) ) {
-			if (value.project_id === data.projectId) {
-				usedWordList.forEach(x=>{
-					if (value.element.includes(x.word))
-						cnt++;
-					if (globalW.includes(x.word))
-						cnt++;
-					if (globalB.includes(x.word))
-						cnt--;
-					})
-			}
-			break ;
-		}
+		 for (const [key, value] of Object.entries(wordList) ) {
+		 	if (value.project_id === data.projectId) {
+		 		usedWordList.forEach(x=>{
+		 			if (value.element.includes(x.word))
+		 				cnt++;
+		 			if (globalW.includes(x.word))
+		 				cnt++;
+		 			if (globalB.includes(x.word))
+		 				cnt--;
+		 			})
+		 	}
+		 	break ;
+		 }
 
 		weightToOndo += cnt * Ratio 
 		if (evalList.timeSpent / data.duration < 3) {
@@ -94,7 +106,6 @@ export class AlgorithmService {
 		} else if (newOndo <= 0) {
 			newOndo = 0;
 		}
-		console.log(userInf.ondo);
-		this.userRepository.update({id: data.from}, {ondo: newOndo})
+		await this.userRepository.update({id: data.from}, {ondo: newOndo})
 	}
 }

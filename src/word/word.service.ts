@@ -67,7 +67,6 @@ export class WordService {
 		for (let i = 0; i < comments.length; i += 30) {
 		  groups.push(comments.slice(i, i + 30));
 		}
-		let result: any[];
 		for (const group of groups) {
 		  // Do some processing with the current group
 		  const words = await parseWord(group)
