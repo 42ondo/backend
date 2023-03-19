@@ -11,8 +11,9 @@ export class WordController {
     return { words };
   }
 
-  @Get('/rank/:id')
-  async getUserWordRanking(@Param('string') userName: string) {
-    return await this.wordService.getUserWordRanking(userName);
+  @Get('/rank/:name')
+  async getUserWordRanking(@Param('name') userName: string) {
+    const words = await this.wordService.getUserWordRanking(userName);
+    return { words };
   }
 }
