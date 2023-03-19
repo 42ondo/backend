@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { OndoModule } from './ondo/ondo.module';
 import { WordModule } from './word/word.module';
 import { StatModule } from './stat/stat.module';
+import { AlgorithmModule } from './algorithm/algorithm.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { StatModule } from './stat/stat.module';
 	OndoModule,
 	WordModule,
 	StatModule,
+	AlgorithmModule,
   ],
 })
 export class AppModule {}

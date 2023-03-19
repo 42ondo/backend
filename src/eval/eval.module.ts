@@ -7,16 +7,19 @@ import { EvalController } from './eval.controller';
 import { UserModule } from 'src/user/user.module';
 import { WordModule } from 'src/word/word.module';
 import { StatModule } from 'src/stat/stat.module';
+import { AlgorithmService } from 'src/algorithm/algorithm.service';
+import { AlgorithmModule } from 'src/algorithm/algorithm.module';
 
 @Module({
   imports: [
     TypeOrmExModule.forCustomRepository([EvalRepository]),
     ApiModule,
     UserModule,
-	  WordModule,
+	WordModule,
     StatModule,
+	AlgorithmModule
   ],
-  providers: [EvalService],
+	providers: [EvalService],
   exports: [EvalService],
   controllers: [EvalController],
 })
