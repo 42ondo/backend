@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Query } from '@nestjs/common';
 import { ApiService } from 'src/api/api.service';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { StatEntity } from 'src/stat/stat.entity';
@@ -73,6 +73,10 @@ export class EvalController {
   @Get('/:name')
   async getEvalDetail(@Param('name') name: string ) :Promise<string> {
     const idbyname = await this.userService.getIdByName(name);
-    return (this.evalService.getEvalDetail(idbyname));
+    const ret = await this.evalService.getEvalDetail(idbyname);
+    if (ret == undefined || ret == null)
+        throw new HttpException('Error', HttpStatus.BAD_REQUEST);
+    return (ret);
   }
 }
+

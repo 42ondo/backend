@@ -125,8 +125,12 @@ export class EvalService {
       .getRawMany();
 
       const targetVal = id;
-      const sortedArr = frequencyResult.slice().sort((a, b) => b.count - a.count);
-      const rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal);
+      console.log(frequencyResult)
+      const sortedArr = frequencyResult.sort((a, b) => b.count - a.count);
+      let rank = sortedArr.findIndex(obj => obj.eval_entity_from === targetVal) ;
+      console.log(rank);
+      if (rank < 0)
+        return (undefined);
       const percentile = (rank / frequencyResult.length) * 100;
       
       const mostSubject = await this.evalRepository
@@ -141,7 +145,8 @@ export class EvalService {
 
       const found = await this.evalRepository.find(
         { where: {
-          from: id
+          from: id,
+          beginAt: Between(weekAgo.toISOString(), today.toISOString()),
         }
       });
       let i = -1;
@@ -181,7 +186,7 @@ export class EvalService {
     result.timeSpentAll = timeSpent;
     result.timeZoneLike = mostFrequentElements.pop();
     result.mostSubject = subjectName;
-    
+
     return  result;
   }
 
