@@ -37,6 +37,7 @@ export class WordService {
 	) {}
 
 	async createWordData(datas: DataType[]): Promise<void> {
+		console.log("datas.length : ", datas.length);
 		const comments = await Promise.all(datas.map(async (item) => {
 			return { 
 				comment:item.comment, 
@@ -44,7 +45,10 @@ export class WordService {
 				user_id: item.from, 
 				project_id: item.projectId };
 		}));
+		console.log("comments", comments.length);
 		const words = await parseWord(comments)
+		console.log("words", words.length);
+
 		this.wordRepository.createWordData(words)
 	}
 
@@ -73,7 +77,6 @@ async function parseWord(comments: CommentData[]): Promise<any> {
 					return false;
 				});
 				const firstFields = data.map((item2) => {
-					const { word, evalId } = item2;
 					return { 
 						word: item2[0], 
 						eval_id: item.eval_id, 
