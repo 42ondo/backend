@@ -1,73 +1,54 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 42 ONDO
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 우리사이… 몇도야?
+당신의 온도를 확인하세요!
 
-## Description
+— 42 ONDO 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+> sujikim, cmoon, Juahn, dongyshi
+> 
 
-## Installation
+## 1. 개요
 
-```bash
-$ npm install
-```
+이 프로젝트는 평가 로그 기반의 통계 자료를 이용하여 유저들의 평가 동향을 파악하고, 평가 능력 향상 및 평가 태도 반성에 기여하는 웹 서비스입니다.
 
-## Running the app
+![Group 71.png](https://raw.githubusercontent.com/42ondo/documents/main/42ONDO/Group_71.png)
 
-```bash
-# development
-$ npm run start
+## **2. 목표**
 
-# watch mode
-$ npm run start:dev
+이 프로젝트의 목표는 42 커뮤니티의 평가 문화를 발전시키는 것입니다. 이를 위해 유저들의 평가 동향을 분석하여 평가 능력 향상에 도움을 주는 것이 주요 목적입니다.
 
-# production mode
-$ npm run start:prod
-```
+## **3. 기능**
 
-## Test
+이 웹 서비스는 다음과 같은 기능을 제공합니다.
 
-```bash
-# unit tests
-$ npm run test
+- 42API에서 유저들의 평가 기록을 불러와서 통계 처리합니다.
+- 유저들은 자신의 평가 횟수, 평가에 투자한 시간, 자주 평가한 시간대 및 서브젝트에 대한 개인별 및 전체 기준의 데이터를 확인할 수 있습니다.
+- 모든 지표를 종합하여 42온도라는 종합 지수를 계산하고, 이를 온도계 형태로 시각화하여 유저들이 자신의 평가 능력을 한 눈에 파악할 수 있도록 합니다.
+    
+    ![Group 74-2.png](https://raw.githubusercontent.com/42ondo/documents/main/42ONDO/Group_74-2.png)
+    
 
-# e2e tests
-$ npm run test:e2e
+## **4. 기술 스택**
 
-# test coverage
-$ npm run test:cov
-```
+이 웹 서비스는 다음과 같은 기술 스택을 사용합니다.
 
-## Support
+- 프론트엔드: React
+- 백엔드: NestJS
+- 데이터베이스: PostgreSQL
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## **5. 발상**
 
-## Stay in touch
+이 프로젝트는 42 커뮤니티의 평가 문화를 발전시키기 위한 아이디어에서 출발하였습니다. 평가를 하면서 자신의 능력을 발전시키기 위해서는 자신의 평가 동향을 파악해야 하지만, 이를 분석하기에는 시간과 노력이 많이 필요합니다. 따라서, 이러한 작업을 자동화하여 유저들이 자신의 평가 동향을 쉽게 파악할 수 있도록 하는 것이 이 프로젝트의 발상이었습니다.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+![Group 69.png](https://raw.githubusercontent.com/42ondo/documents/main/42ONDO/Group_69.png)
 
-## License
+## **6. 효과**
 
-Nest is [MIT licensed](LICENSE).
+- 개인별 및 전체적인 평가 동향을 시각적으로 확인할 수 있기 때문에, 학습에 대한 목표 설정 및 성취도 파악이 가능합니다.
+- 시각화된 지표를 도입하여 평가에 대한 흥미를 유발하고 이를 통해 양질의 평가가 다수 이루어질 수 있도록 유도합니다.
+- 유저들은 서로의 평가 동향을 비교하면서 서로의 능력 수준을 인식하고, 동기부여를 얻을 수 있습니다.
+
+![Group 68.png](https://raw.githubusercontent.com/42ondo/documents/main/42ONDO/Group_68.png)
